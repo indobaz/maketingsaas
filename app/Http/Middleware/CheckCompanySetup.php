@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class CheckCompanySetup
+{
+    private const DEFAULT_PRIMARY = '#5F63F2';
+
+    /**
+     * @param  Closure(Request): (Response|RedirectResponse)  $next
+     */
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return $next($request);
+        }
+
+        if (($user->role ?? null) !== 'owner') {
+            return $next($request);
+        }
+
+        if (!$user->company_id) {
+            return redirect('/onboarding');
+        }
+
+        $company = $user->company;
+        if (!$company) {
+            return redirect('/onboarding');
+        }
+
+        $isOnboarding = $request->is('onboarding') || $request->is('onboarding/*');
+        $isComplete = $company->industry !== null && (string) $company->primary_color !== self::DEFAULT_PRIMARY;
+        if (!$isOnboarding && !$isComplete) {
+            return redirect('/onboarding');
+        }
+
+        return $next($request);
+    }
+}
+
