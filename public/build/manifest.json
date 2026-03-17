@@ -1,0 +1,74 @@
+{
+  "__commonjsHelpers-DsqdWQfm.js": {
+    "file": "assets/_commonjsHelpers-DsqdWQfm.js",
+    "name": "_commonjsHelpers"
+  },
+  "node_modules/remixicon/fonts/remixicon.eot": {
+    "file": "assets/remixicon-B25hvfAs.eot",
+    "src": "node_modules/remixicon/fonts/remixicon.eot"
+  },
+  "node_modules/remixicon/fonts/remixicon.svg": {
+    "file": "assets/remixicon-BTtOSOPh.svg",
+    "src": "node_modules/remixicon/fonts/remixicon.svg"
+  },
+  "node_modules/remixicon/fonts/remixicon.ttf": {
+    "file": "assets/remixicon-sqouR8Ox.ttf",
+    "src": "node_modules/remixicon/fonts/remixicon.ttf"
+  },
+  "node_modules/remixicon/fonts/remixicon.woff": {
+    "file": "assets/remixicon-S6an_USy.woff",
+    "src": "node_modules/remixicon/fonts/remixicon.woff"
+  },
+  "node_modules/remixicon/fonts/remixicon.woff2": {
+    "file": "assets/remixicon-CZw4FkzQ.woff2",
+    "src": "node_modules/remixicon/fonts/remixicon.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BfpnsOtI.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "__commonjsHelpers-DsqdWQfm.js"
+    ]
+  },
+  "resources/js/config.js": {
+    "file": "assets/config-Bf-A8Wx8.js",
+    "name": "config",
+    "src": "resources/js/config.js",
+    "isEntry": true
+  },
+  "resources/js/layout.js": {
+    "file": "assets/layout-MV0S5xiM.js",
+    "name": "layout",
+    "src": "resources/js/layout.js",
+    "isEntry": true
+  },
+  "resources/js/pages/dashboard-analytics.js": {
+    "file": "assets/dashboard-analytics-DkzDEQ73.js",
+    "name": "dashboard-analytics",
+    "src": "resources/js/pages/dashboard-analytics.js",
+    "isEntry": true,
+    "imports": [
+      "__commonjsHelpers-DsqdWQfm.js"
+    ]
+  },
+  "resources/scss/app.scss": {
+    "file": "assets/app-C9DTCWPI.css",
+    "src": "resources/scss/app.scss",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/scss/icons.scss": {
+    "file": "assets/icons-CJPcDQ9N.css",
+    "src": "resources/scss/icons.scss",
+    "isEntry": true,
+    "name": "icons",
+    "names": [
+      "icons.css"
+    ]
+  }
+}
