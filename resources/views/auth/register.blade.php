@@ -7,12 +7,8 @@
             <div class="card shadow-sm my-5">
                 <div class="card-body p-4 p-lg-5">
                     <div class="text-center mb-4">
-                        <div class="fw-bold text-white" style="font-size: 28px; letter-spacing: .2px;">
-                            Pulsify
-                        </div>
-                        <div class="text-white-50" style="font-size: 14px;">
-                            Create your account
-                        </div>
+                        <div class="auth-wordmark">Pulsify</div>
+                        <div class="auth-subtitle">Create your account</div>
                     </div>
 
                     <form method="POST" action="{{ url('/register') }}" novalidate>
@@ -113,8 +109,8 @@
                     </form>
 
                     <div class="text-center mt-4">
-                        <span class="text-muted">Already have an account?</span>
-                        <a href="{{ url('/login') }}" class="text-decoration-none">
+                        <span class="auth-body-muted">Already have an account?</span>
+                        <a href="{{ url('/login') }}" class="text-decoration-none auth-inline-link">
                             Sign in
                         </a>
                     </div>

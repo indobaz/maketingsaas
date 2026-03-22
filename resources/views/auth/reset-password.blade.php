@@ -7,12 +7,8 @@
             <div class="card shadow-sm my-5">
                 <div class="card-body p-4 p-lg-5">
                     <div class="text-center mb-4">
-                        <div class="fw-bold auth-brand text-white" style="font-size: 28px; letter-spacing: .2px;">
-                            Pulsify
-                        </div>
-                        <div class="text-white-50" style="font-size: 14px;">
-                            Set new password
-                        </div>
+                        <div class="auth-wordmark">Pulsify</div>
+                        <div class="auth-subtitle">Set new password</div>
                     </div>
 
                     @if (session('error'))
@@ -25,7 +21,7 @@
                         <input type="hidden" name="email" value="{{ old('email', $email) }}">
 
                         <div class="mb-3">
-                            <label for="password" class="form-label text-white">New Password</label>
+                            <label for="password" class="form-label">New Password</label>
                             <input
                                 id="password"
                                 name="password"
@@ -39,7 +35,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="password_confirmation" class="form-label text-white">Confirm Password</label>
+                            <label for="password_confirmation" class="form-label">Confirm Password</label>
                             <input
                                 id="password_confirmation"
                                 name="password_confirmation"

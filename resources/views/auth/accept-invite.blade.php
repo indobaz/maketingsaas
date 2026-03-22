@@ -6,10 +6,8 @@
             <div class="card shadow-sm mt-4">
                 <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-4">
-                        <div class="fw-bold" style="color: #5F63F2; font-size: 26px;">
-                            Pulsify
-                        </div>
-                        <div class="text-muted">Accept your invitation</div>
+                        <div class="auth-wordmark">Pulsify</div>
+                        <div class="auth-subtitle">Accept your invitation</div>
                     </div>
 
                     @if(!empty($error))
@@ -17,14 +15,14 @@
                             {{ $error }}
                         </div>
                         <div class="text-center">
-                            <a href="{{ url('/login') }}" class="text-decoration-none" style="color: #5F63F2;">
+                            <a href="{{ url('/login') }}" class="text-decoration-none auth-inline-link">
                                 Go to login
                             </a>
                         </div>
                     @else
                         <div class="mb-3">
-                            <div class="fw-semibold">You've been invited to join</div>
-                            <div class="fw-bold" style="font-size: 20px; color: #5F63F2;">
+                            <div class="fw-semibold auth-card-heading">You've been invited to join</div>
+                            <div class="fw-bold auth-company-highlight" style="font-size: 20px;">
                                 {{ $company?->name }}
                             </div>
                         </div>

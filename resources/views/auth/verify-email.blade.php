@@ -20,12 +20,8 @@
             <div class="card shadow-sm my-5">
                 <div class="card-body p-4 p-lg-5">
                     <div class="text-center mb-4">
-                        <div class="fw-bold text-white" style="font-size: 28px; letter-spacing: .2px;">
-                            Pulsify
-                        </div>
-                        <div class="text-white-50" style="font-size: 14px;">
-                            Verify your email
-                        </div>
+                        <div class="auth-wordmark">Pulsify</div>
+                        <div class="auth-subtitle">Verify your email</div>
                     </div>
 
                     @if (session('error'))
@@ -38,13 +34,13 @@
                         <div class="alert alert-success mb-3" role="alert">{{ session('success') }}</div>
                     @endif
 
-                    <div class="mb-3 text-muted" style="font-size: 14px;">
-                        We sent a 6-digit code to <span class="fw-semibold">{{ $maskEmail($email) }}</span>
+                    <div class="mb-3 auth-body-muted">
+                        We sent a 6-digit code to <span class="fw-semibold auth-card-heading">{{ $maskEmail($email) }}</span>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="text-muted" style="font-size: 13px;">
-                            Code expires in <span id="otp-timer" class="fw-semibold">15:00</span>
+                        <div class="auth-body-muted" style="font-size: 13px;">
+                            Code expires in <span id="otp-timer" class="fw-semibold auth-card-heading">15:00</span>
                         </div>
                     </div>
 
@@ -80,7 +76,6 @@
                             Resend code
                         </button>
                     </form>
-                    </div>
                 </div>
             </div>
         </div>

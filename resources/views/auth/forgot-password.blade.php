@@ -7,15 +7,11 @@
             <div class="card shadow-sm my-5">
                 <div class="card-body p-4 p-lg-5">
                     <div class="text-center mb-4">
-                        <div class="fw-bold auth-brand text-white" style="font-size: 28px; letter-spacing: .2px;">
-                            Pulsify
-                        </div>
-                        <div class="text-white-50" style="font-size: 14px;">
-                            Forgot your password?
-                        </div>
+                        <div class="auth-wordmark">Pulsify</div>
+                        <div class="auth-subtitle">Forgot your password?</div>
                     </div>
 
-                    <div class="text-white-50 mb-3" style="font-size: 14px;">
+                    <div class="auth-body-muted mb-3">
                         Enter your email and we'll send you a reset link
                     </div>
 
@@ -30,7 +26,7 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="email" class="form-label text-white">Email</label>
+                            <label for="email" class="form-label">Email</label>
                             <input
                                 id="email"
                                 name="email"
@@ -51,7 +47,7 @@
                     </form>
 
                     <div class="text-center mt-4">
-                        <a href="{{ url('/login') }}" class="text-decoration-none text-white-50">
+                        <a href="{{ url('/login') }}" class="text-decoration-none auth-inline-link">
                             &larr; Back to sign in
                         </a>
                     </div>
