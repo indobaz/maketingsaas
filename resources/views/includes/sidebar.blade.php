@@ -17,7 +17,7 @@
 
     $nav = [
         ['label' => 'Dashboard', 'icon' => 'bi-grid', 'href' => url('/dashboard'), 'active' => request()->is('dashboard')],
-        ['label' => 'Channels', 'icon' => 'bi-broadcast', 'href' => url('/channels'), 'active' => request()->is('channels*')],
+        ['label' => 'Channels', 'icon' => 'bi-broadcast', 'href' => url('/channels'), 'active' => request()->routeIs('channels.*')],
         ['label' => 'Content', 'icon' => 'bi-file-text', 'href' => url('/content'), 'active' => request()->is('content*')],
         ['label' => 'Calendar', 'icon' => 'bi-calendar3', 'href' => url('/calendar'), 'active' => request()->is('calendar*')],
         ['label' => 'Analytics', 'icon' => 'bi-bar-chart', 'href' => url('/analytics'), 'active' => request()->is('analytics*')],
@@ -31,6 +31,7 @@
 
     $settingsNav = [
         ['label' => 'Settings', 'icon' => 'bi-gear', 'href' => url('/settings'), 'active' => request()->is('settings*')],
+        ['label' => 'Content Pillars', 'icon' => 'bi-columns-gap', 'href' => url('/pillars'), 'active' => request()->routeIs('pillars.*')],
         ['label' => 'Team', 'icon' => 'bi-people', 'href' => url('/team'), 'active' => request()->is('team*')],
     ];
 @endphp

@@ -40,6 +40,7 @@
         }
         html[data-menu-size="condensed"] .pulsify-brand .brand-expanded { display: none; }
         html[data-menu-size="condensed"] .pulsify-brand .brand-collapsed { display: flex; justify-content: center; width: 100%; }
+
     </style>
 </head>
 
@@ -49,8 +50,8 @@
     <header class="">
         <div class="topbar">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <div class="d-flex align-items-center gap-2">
+                <div class="navbar-header d-flex align-items-center flex-wrap justify-content-between gap-2">
+                    <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-0">
                         <div class="topbar-item">
                             <button type="button" class="button-toggle-menu topbar-button">
                                 <i class="ri-menu-2-line fs-24"></i>
@@ -63,6 +64,9 @@
                                 <i class="ri-search-line search-widget-icon"></i>
                             </div>
                         </form>
+                        <a href="{{ url('/content/create') }}" style="margin-left:12px; padding:6px 16px; background:var(--brand-primary,#5F63F2); color:#fff; border-radius:8px; font-size:13px; font-weight:500; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; text-decoration:none; line-height:1.5; border:none;">
+                            + New Post
+                        </a>
                     </div>
 
                     <div class="d-flex align-items-center gap-1">
@@ -122,17 +126,19 @@
         <div class="logo-box">
             <a href="{{ url('/dashboard') }}" class="pulsify-brand">
                 <span class="brand-expanded">
-                    <span class="text-white" style="font-weight: 700; font-size: 16px; line-height: 1.1;">
-                        ⚡ Pulsify
-                    </span>
-                    <span style="display:block; opacity: 0.6; color: #fff; font-size: 12px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{ auth()->user()->company->name }}
-                    </span>
+                    <div style="display:flex; flex-direction:column; gap:1px; min-width:0;">
+                        <span class="text-white" style="font-size:15px; font-weight:700; color:#fff; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                            {{ auth()->user()->company->name }}
+                        </span>
+                        <span style="font-size:10px; color:rgba(255,255,255,0.45); line-height:1.2; margin-top:0;">
+                            Powered by Pulsify
+                        </span>
+                    </div>
                 </span>
 
                 <span class="brand-collapsed">
                     <span style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 8px; background: var(--brand-primary, #5F63F2); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                        P
+                        {{ strtoupper(substr(auth()->user()->company->name, 0, 1)) }}
                     </span>
                 </span>
             </a>
@@ -148,29 +154,40 @@
 
                 @php
                     $navItems = [
-                        ['label' => 'Dashboard', 'href' => url('/dashboard'), 'icon' => 'ri-dashboard-line'],
-                        ['label' => 'Channels', 'href' => url('/channels'), 'icon' => 'ri-broadcast-line'],
-                        ['label' => 'Content', 'href' => url('/content'), 'icon' => 'ri-file-text-line'],
-                        ['label' => 'Calendar', 'href' => url('/calendar'), 'icon' => 'ri-calendar-3-line'],
-                        ['label' => 'Analytics', 'href' => url('/analytics'), 'icon' => 'ri-bar-chart-2-line'],
-                        ['label' => 'Email Tracking', 'href' => url('/email-tracking'), 'icon' => 'ri-mail-line'],
-                        ['label' => 'Ads Tracking', 'href' => url('/ads-tracking'), 'icon' => 'ri-megaphone-line'],
-                        ['label' => 'Tasks', 'href' => url('/tasks'), 'icon' => 'ri-checkbox-multiple-line'],
-                        ['label' => 'Campaigns', 'href' => url('/campaigns'), 'icon' => 'ri-focus-3-line'],
-                        ['label' => 'AI Reports', 'href' => url('/ai-reports'), 'icon' => 'ri-robot-line'],
-                        ['label' => 'Competitors', 'href' => url('/competitors'), 'icon' => 'ri-spy-line'],
-                        ['label' => 'Settings', 'href' => url('/settings'), 'icon' => 'ri-settings-3-line'],
-                        ['label' => 'Team', 'href' => url('/team'), 'icon' => 'ri-team-line'],
+                        ['label' => 'Dashboard', 'href' => url('/dashboard'), 'icon' => 'ri-dashboard-line', 'placeholder' => false, 'active' => request()->is('dashboard')],
+                        ['label' => 'Channels', 'href' => url('/channels'), 'icon' => 'ri-broadcast-line', 'placeholder' => false, 'active' => request()->is('channels*')],
+                        ['label' => 'Content', 'href' => url('/content'), 'icon' => 'ri-file-text-line', 'placeholder' => false, 'active' => request()->is('content*')],
+                        ['label' => 'Calendar', 'href' => url('/calendar'), 'icon' => 'ri-calendar-line', 'placeholder' => false, 'active' => request()->is('calendar*')],
+                        ['label' => 'Analytics', 'href' => 'javascript:void(0)', 'icon' => 'ri-bar-chart-2-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'Email Tracking', 'href' => 'javascript:void(0)', 'icon' => 'ri-mail-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'Ads Tracking', 'href' => 'javascript:void(0)', 'icon' => 'ri-megaphone-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'Tasks', 'href' => url('/tasks'), 'icon' => 'ri-checkbox-multiple-line', 'placeholder' => false, 'active' => request()->is('tasks*')],
+                        ['label' => 'Campaigns', 'href' => 'javascript:void(0)', 'icon' => 'ri-focus-3-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'AI Reports', 'href' => 'javascript:void(0)', 'icon' => 'ri-robot-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'Competitors', 'href' => 'javascript:void(0)', 'icon' => 'ri-spy-line', 'placeholder' => true, 'active' => false],
+                        ['label' => 'Settings', 'href' => url('/settings'), 'icon' => 'ri-settings-3-line', 'placeholder' => false, 'active' => request()->is('settings*')],
+                        ['label' => 'Team', 'href' => url('/team'), 'icon' => 'ri-team-line', 'placeholder' => false, 'active' => request()->is('team*')],
                     ];
-                    $current = url()->current();
+                    $navPrimary = auth()->user()->company->primary_color;
                 @endphp
 
                 @foreach($navItems as $item)
-                    @php($isActive = str_starts_with($current, $item['href']))
+                    @php
+                        $isActive = $item['active'];
+                        $isPlaceholder = $item['placeholder'];
+                        $navStyle = '';
+                        if ($isActive && ! $isPlaceholder) {
+                            $navStyle = 'color: '.$navPrimary.'; border-left: 3px solid '.$navPrimary.';';
+                        }
+                        if ($isPlaceholder) {
+                            $navStyle .= ($navStyle !== '' ? ' ' : '').'opacity: 0.6; cursor: default;';
+                        }
+                    @endphp
                     <li class="nav-item">
                         <a class="nav-link {{ $isActive ? 'active' : '' }}"
                            href="{{ $item['href'] }}"
-                           @if($isActive) style="color: {{ auth()->user()->company->primary_color }}; border-left: 3px solid {{ auth()->user()->company->primary_color }};" @endif>
+                           @if($isPlaceholder) title="Coming Soon" @endif
+                           @if($navStyle !== '') style="{{ $navStyle }}" @endif>
                             <span class="nav-icon"><i class="{{ $item['icon'] }}"></i></span>
                             <span class="nav-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">
                                 {{ $item['label'] }}

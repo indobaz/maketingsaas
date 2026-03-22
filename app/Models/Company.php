@@ -22,10 +22,12 @@ class Company extends Model
         'secondary_color',
         'plan',
         'plan_expires_at',
+        'extra_settings',
     ];
 
     protected $casts = [
         'plan_expires_at' => 'datetime',
+        'extra_settings' => 'array',
     ];
 
     public function users(): HasMany
@@ -58,4 +60,3 @@ class Company extends Model
         return $this->hasMany(ContentPillar::class);
     }
 }
-

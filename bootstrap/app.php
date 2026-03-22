@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Middleware\CheckCompanySetup;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\CheckCompanySetup;
-use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Support\ViewErrorBag;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,5 +21,27 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->renderable(function (HttpExceptionInterface $e, $request) {
+            if ($request->expectsJson()) {
+                return null;
+            }
+
+            $status = $e->getStatusCode();
+
+            if (! in_array($status, [403, 404], true)) {
+                return null;
+            }
+
+            // Dot notation: works before the `errors::` namespace is registered for HTTP exceptions.
+            $view = 'errors.'.$status;
+
+            if (! view()->exists($view)) {
+                return null;
+            }
+
+            return response()->view($view, [
+                'errors' => new ViewErrorBag,
+                'exception' => $e,
+            ], $status, $e->getHeaders());
+        });
     })->create();

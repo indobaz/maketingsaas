@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Channel extends Model
 {
@@ -44,5 +45,9 @@ class Channel extends Model
     {
         return $this->hasMany(FollowerSnapshot::class);
     }
-}
 
+    public function latestFollowerSnapshot(): HasOne
+    {
+        return $this->hasOne(FollowerSnapshot::class)->latestOfMany(['recorded_date', 'id']);
+    }
+}

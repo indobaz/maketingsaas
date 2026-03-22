@@ -60,5 +60,14 @@ class Task extends Model
     {
         return $this->hasMany(TaskNote::class);
     }
-}
 
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(TaskChecklist::class)->orderBy('sort_order');
+    }
+
+    public function subtasks(): HasMany
+    {
+        return $this->hasMany(Subtask::class, 'parent_task_id')->orderBy('sort_order');
+    }
+}
