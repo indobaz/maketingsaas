@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\TeamInviteMail;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -83,7 +82,14 @@ class TeamController extends Controller
         ]);
 
         try {
-            Mail::to($invitee->email)->send(new TeamInviteMail($invitee, $actor, $token));
+            $mailer = new PulsifyMailer($actor->company);
+            $mailer->send('team_invite', (string) $invitee->email, '', [
+                'inviter_name' => (string) $actor->name,
+                'company' => (string) ($actor->company?->name ?? 'your team'),
+                'role' => (string) $validated['role'],
+                'invite_url' => url('/invite/accept').'?token='.$token,
+                'expiry_days' => '7',
+            ]);
         } catch (\Throwable) {
             $request->session()->flash('warning', 'Invite created but email failed to send. Please configure SMTP and use resend.');
         }
@@ -113,7 +119,14 @@ class TeamController extends Controller
         ])->save();
 
         try {
-            Mail::to($user->email)->send(new TeamInviteMail($user, $actor, $token));
+            $mailer = new PulsifyMailer($actor->company);
+            $mailer->send('team_invite', (string) $user->email, '', [
+                'inviter_name' => (string) $actor->name,
+                'company' => (string) ($actor->company?->name ?? 'your team'),
+                'role' => (string) $user->role,
+                'invite_url' => url('/invite/accept').'?token='.$token,
+                'expiry_days' => '7',
+            ]);
         } catch (\Throwable) {
             return back()->with('warning', 'Could not send the email right now. Please try again.');
         }

@@ -20,6 +20,7 @@ class Company extends Model
         'logo_url',
         'primary_color',
         'secondary_color',
+        'onboarding_completed',
         'plan',
         'plan_expires_at',
         'extra_settings',
@@ -27,6 +28,7 @@ class Company extends Model
 
     protected $casts = [
         'plan_expires_at' => 'datetime',
+        'onboarding_completed' => 'boolean',
         'extra_settings' => 'array',
     ];
 

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\PostComment;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class PostApprovalController extends Controller
 {
@@ -180,15 +180,17 @@ class PostApprovalController extends Controller
             ->get();
 
         $title = $post->title !== null && $post->title !== '' ? $post->title : 'Untitled';
-        $subject = 'New post ready for review: '.$title;
-        $url = route('content.edit', $post);
-        $body = "A new post is ready for review.\n\nPost: {$title}\n\nReview it here:\n{$url}\n";
+        $mailer = new PulsifyMailer(Auth::user()->company);
 
         foreach ($recipients as $recipient) {
             try {
-                Mail::raw($body, function ($message) use ($recipient, $subject) {
-                    $message->to($recipient->email)->subject($subject);
-                });
+                $mailer->send('post_submitted', (string) $recipient->email, (string) ($recipient->name ?? 'User'), [
+                    'submitter_name' => (string) (Auth::user()->name ?? 'User'),
+                    'post_title' => $title,
+                    'post_type' => (string) ($post->post_type ?? 'post'),
+                    'channel' => (string) ($post->channel?->name ?? $post->channel?->platform ?? 'N/A'),
+                    'review_url' => route('content.edit', $post),
+                ]);
             } catch (\Throwable) {
                 // silent
             }
@@ -203,14 +205,20 @@ class PostApprovalController extends Controller
         }
 
         $title = $post->title !== null && $post->title !== '' ? $post->title : 'Untitled';
-        $subject = 'Your post has been approved';
-        $url = route('content.edit', $post);
-        $body = "Your post \"{$title}\" has been approved.\n\nView it here:\n{$url}\n";
+        $comment = (string) (PostComment::query()
+            ->where('post_id', $post->id)
+            ->where('status_change', 'approved')
+            ->latest('id')
+            ->value('comment') ?? '');
 
         try {
-            Mail::raw($body, function ($message) use ($creator, $subject) {
-                $message->to($creator->email)->subject($subject);
-            });
+            $mailer = new PulsifyMailer($creator->company);
+            $mailer->send('post_approved', (string) $creator->email, (string) ($creator->name ?? 'User'), [
+                'approver_name' => (string) (Auth::user()->name ?? 'Reviewer'),
+                'post_title' => $title,
+                'comment' => $comment !== '' ? $comment : 'Approved',
+                'post_url' => route('content.edit', $post),
+            ]);
         } catch (\Throwable) {
             // silent
         }
@@ -224,14 +232,15 @@ class PostApprovalController extends Controller
         }
 
         $title = $post->title !== null && $post->title !== '' ? $post->title : 'Untitled';
-        $subject = 'Your post needs revision';
-        $url = route('content.edit', $post);
-        $body = "Your post \"{$title}\" needs revision.\n\nReason:\n{$reason}\n\nOpen the post:\n{$url}\n";
 
         try {
-            Mail::raw($body, function ($message) use ($creator, $subject) {
-                $message->to($creator->email)->subject($subject);
-            });
+            $mailer = new PulsifyMailer($creator->company);
+            $mailer->send('post_rejected', (string) $creator->email, (string) ($creator->name ?? 'User'), [
+                'approver_name' => (string) (Auth::user()->name ?? 'Reviewer'),
+                'post_title' => $title,
+                'reason' => $reason,
+                'post_url' => route('content.edit', $post),
+            ]);
         } catch (\Throwable) {
             // silent
         }

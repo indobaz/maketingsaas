@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckCompanySetup
 {
-    private const DEFAULT_PRIMARY = '#5F63F2';
-
     /**
      * @param  Closure(Request): (Response|RedirectResponse)  $next
      */
@@ -36,8 +34,15 @@ class CheckCompanySetup
         }
 
         $isOnboarding = $request->is('onboarding') || $request->is('onboarding/*');
-        $isComplete = $company->industry !== null && (string) $company->primary_color !== self::DEFAULT_PRIMARY;
-        if (!$isOnboarding && !$isComplete) {
+        if ((bool) ($company->onboarding_completed ?? false) === true) {
+            return $next($request);
+        }
+
+        if (($company->industry ?? null) === null && !$isOnboarding) {
+            return redirect('/onboarding');
+        }
+
+        if (!$isOnboarding) {
             return redirect('/onboarding');
         }
 

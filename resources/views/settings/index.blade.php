@@ -194,6 +194,12 @@
             <div class="settings-tab-pane d-none" id="tab-email" data-tab-panel="email" role="tabpanel">
                 <div class="card border-0 shadow-sm" style="border-radius: 12px; border: 1px solid #F0F2F5 !important;">
                     <div class="card-body p-4">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <a href="{{ route('email-templates.index') }}" class="btn btn-outline-primary btn-sm">
+                                Manage Email Templates
+                            </a>
+                        </div>
+
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                             <div>
                                 <h5 class="fw-semibold mb-1">Email Configuration</h5>

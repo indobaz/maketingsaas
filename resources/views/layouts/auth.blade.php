@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @php($title = $title ?? config('app.name', 'Pulsify'))
+    @php($title = ($pageTitle ?? ($title ?? 'Login')) . ' | Pulsify')
     @include('layouts.partials/title-meta', ['title' => $title])
     @include('layouts.partials/head-css')
     <style>

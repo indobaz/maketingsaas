@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\OtpVerificationMail;
 use App\Models\Company;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -68,7 +67,12 @@ class RegisterController extends Controller
 
         $request->session()->put('verify_email', $user->email);
         try {
-            Mail::to($user->email)->send(new OtpVerificationMail($otp, $user->name));
+            $mailer = new PulsifyMailer(null);
+            $mailer->send('otp_verification', (string) $user->email, (string) ($user->name ?? 'User'), [
+                'name' => (string) ($user->name ?? 'User'),
+                'otp' => $otp,
+                'expiry_minutes' => (string) config('pulsify.otp_expiry_minutes'),
+            ]);
         } catch (\Throwable) {
             $request->session()->flash(
                 'warning',

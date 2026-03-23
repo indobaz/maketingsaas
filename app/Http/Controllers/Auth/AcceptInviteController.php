@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -75,6 +76,22 @@ class AcceptInviteController extends Controller
             'otp_code' => null,
             'otp_expires_at' => null,
         ])->save();
+
+        $owner = User::query()
+            ->where('company_id', $user->company_id)
+            ->where('role', 'owner')
+            ->whereNotNull('email')
+            ->first();
+        if ($owner && $owner->email !== '') {
+            $mailer = new PulsifyMailer($owner->company);
+            $mailer->send('invite_accepted', (string) $owner->email, (string) ($owner->name ?? 'Owner'), [
+                'new_member_name' => (string) $user->name,
+                'new_member_email' => (string) $user->email,
+                'role' => ucfirst((string) $user->role),
+                'company' => (string) ($user->company?->name ?? 'your company'),
+                'team_url' => url('/team'),
+            ]);
+        }
 
         Auth::login($user);
 

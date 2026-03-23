@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\PasswordResetMail;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -54,7 +53,12 @@ class PasswordResetController extends Controller
         ]);
 
         try {
-            Mail::to($email)->send(new PasswordResetMail($email, $plainToken));
+            $mailer = new PulsifyMailer($user->company);
+            $mailer->send('password_reset', (string) $user->email, (string) ($user->name ?? 'User'), [
+                'name' => (string) ($user->name ?? 'User'),
+                'reset_url' => url('/reset-password').'?token='.$plainToken.'&email='.urlencode((string) $user->email),
+                'expiry_minutes' => '60',
+            ]);
         } catch (\Throwable) {
             // Don't reveal whether the email exists or if mail failed.
         }

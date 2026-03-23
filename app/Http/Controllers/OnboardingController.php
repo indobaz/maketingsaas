@@ -228,6 +228,8 @@ class OnboardingController extends Controller
             'secondary_color' => strtoupper($validated['secondary_color']),
         ])->save();
 
+        auth()->user()->company->update(['onboarding_completed' => true]);
+
         return redirect('/dashboard')->with('success', 'Welcome to Pulsify! Your workspace is ready.');
     }
 
@@ -246,8 +248,7 @@ class OnboardingController extends Controller
 
     private function isOnboardingComplete(mixed $company): bool
     {
-        return ($company->industry ?? null) !== null
-            && (string) ($company->primary_color ?? '') !== self::DEFAULT_PRIMARY;
+        return (bool) ($company->onboarding_completed ?? false) === true;
     }
 }
 

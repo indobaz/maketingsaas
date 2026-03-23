@@ -6,7 +6,8 @@
         $company = $user?->company;
         $primaryColor = $company?->primary_color ?? '#5F63F2';
 
-        $title = $pageTitle ?? 'Dashboard';
+        $title = ($pageTitle ?? 'Dashboard') . ' | ' . ($company?->name ?? 'Pulsify');
+        $pageHeading = $pageTitle ?? 'Dashboard';
         $subTitle = $company?->name ?? 'Pulsify';
     @endphp
 
@@ -201,7 +202,7 @@
 
     <div class="page-content">
         <div class="container-fluid">
-            @include('layouts.partials/page-title', ['title' => $title, 'subTitle' => $subTitle])
+            @include('layouts.partials/page-title', ['title' => $pageHeading, 'subTitle' => $subTitle])
 
             @yield('content')
         </div>

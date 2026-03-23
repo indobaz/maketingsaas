@@ -6,5 +6,6 @@ return [
     'session_timeout_minutes' => 60,
     'trial_days' => 14,
     'plans' => ['free', 'starter', 'pro', 'enterprise'],
+    'super_admin_email' => env('SUPER_ADMIN_EMAIL', 'ru9220@gmail.com'),
 ];
 

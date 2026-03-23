@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\TaskChecklist;
 use App\Models\TaskNote;
 use App\Models\User;
+use App\Services\PulsifyMailer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -315,6 +316,8 @@ class TaskController extends Controller
             ]);
         }
 
+        $this->notifyAssignee($task);
+
         return back()->with('success', 'Task created');
     }
 
@@ -336,6 +339,8 @@ class TaskController extends Controller
             'campaign_id' => $validated['campaign_id'] ?? null,
         ]);
         $task->save();
+
+        $this->notifyAssignee($task);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -583,5 +588,33 @@ class TaskController extends Controller
         if (! $subtask->parentTask || $subtask->parentTask->company_id !== Auth::user()->company_id) {
             abort(403);
         }
+    }
+
+    private function notifyAssignee(Task $task): void
+    {
+        $currentUser = Auth::user();
+        if (! $task->assigned_to || (int) $task->assigned_to === (int) $currentUser->id) {
+            return;
+        }
+
+        $assignee = User::query()
+            ->where('company_id', (int) $currentUser->company_id)
+            ->whereKey((int) $task->assigned_to)
+            ->whereNotNull('email')
+            ->first();
+
+        if (! $assignee || $assignee->email === '') {
+            return;
+        }
+
+        $mailer = PulsifyMailer::forUser($currentUser);
+        $mailer->send('task_assigned', (string) $assignee->email, (string) ($assignee->name ?? 'User'), [
+            'assigner_name' => (string) ($currentUser->name ?? 'User'),
+            'task_title' => (string) $task->title,
+            'task_type' => (string) ucfirst((string) $task->type),
+            'due_date' => $task->due_date ? $task->due_date->format('Y-m-d') : 'Not set',
+            'priority' => ucfirst((string) $task->priority),
+            'task_url' => url('/tasks'),
+        ]);
     }
 }

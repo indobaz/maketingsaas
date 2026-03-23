@@ -9,10 +9,12 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\ContentPillarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PostApprovalController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
@@ -95,6 +97,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::middleware(['role:owner,admin'])->group(function () {
             Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+            Route::get('/email-templates', [EmailTemplateController::class, 'index'])->name('email-templates.index');
+            Route::get('/email-templates/{key}/edit', [EmailTemplateController::class, 'edit'])->name('email-templates.edit');
+            Route::get('/email-templates/{key}/preview', [EmailTemplateController::class, 'preview'])->name('email-templates.preview');
         });
 
         Route::middleware(['role:owner'])->group(function () {
@@ -102,6 +107,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/settings/smtp', [SettingsController::class, 'updateSmtp'])->name('settings.smtp');
             Route::post('/settings/brand', [SettingsController::class, 'updateBrandKit'])->name('settings.brand');
             Route::post('/settings/company', [SettingsController::class, 'updateCompany'])->name('settings.company');
+            Route::post('/email-templates/{key}', [EmailTemplateController::class, 'update'])->name('email-templates.update');
+            Route::post('/email-templates/{key}/reset', [EmailTemplateController::class, 'reset'])->name('email-templates.reset');
+            Route::post('/email-templates/{key}/test', [EmailTemplateController::class, 'sendTest'])->name('email-templates.test');
         });
     });
 
@@ -113,4 +121,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/team/invite', [TeamController::class, 'invite']);
     Route::post('/team/{user}/resend', [TeamController::class, 'resendInvite']);
     Route::delete('/team/{user}/remove', [TeamController::class, 'removeUser']);
+
+    Route::get('/super-admin/smtp', [SuperAdminController::class, 'smtpSettings'])->name('super-admin.smtp');
+    Route::post('/super-admin/smtp', [SuperAdminController::class, 'updateSmtp'])->name('super-admin.smtp.update');
+    Route::post('/super-admin/smtp/test', [SuperAdminController::class, 'testSmtp'])->name('super-admin.smtp.test');
 });
